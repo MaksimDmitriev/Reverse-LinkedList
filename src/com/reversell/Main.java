@@ -11,10 +11,14 @@ public class Main {
         linkedList.addLast(new Node(88));
 
         linkedList.print();
+        System.out.println(linkedList.getFirst());
+        System.out.println(linkedList.getLast());
         // Reverse
         // 12 1 125 66 88
         linkedList.reverse();
         linkedList.print();
+        System.out.println(linkedList.getFirst());
+        System.out.println(linkedList.getLast());
     }
 
 }

@@ -18,6 +18,11 @@ public class SinglyLinkedList {
     public Node getFirst() {
         return mFirst;
     }
+    
+    
+    public Node getLast() {
+        return mLast;
+    }
 
     public void print() {
         Node current = mFirst;
