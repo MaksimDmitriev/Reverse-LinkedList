@@ -9,6 +9,17 @@ public class SinglyLinkedList {
         this.mFirst = first;
         this.mLast = first;
     }
+    
+    public SinglyLinkedList(int []array) {
+        if (array == null || array.length == 0) {
+            throw new IllegalArgumentException();
+        }
+        this.mFirst = new Node(array[0]);
+        this.mLast = this.mFirst;
+        for (int i = 1; i < array.length; i++) {
+            addLast(new Node(array[i]));
+        }
+    }
 
     public void addLast(Node node) {
         mLast.setNext(node);
@@ -18,8 +29,7 @@ public class SinglyLinkedList {
     public Node getFirst() {
         return mFirst;
     }
-    
-    
+
     public Node getLast() {
         return mLast;
     }
@@ -36,6 +46,35 @@ public class SinglyLinkedList {
         }
         System.out.print("]");
         System.out.println();
+    }
+
+    public void reversePairs() {
+        Node prev = mFirst;
+        Node curr = prev.getNext();
+        Node old = null;
+        while (curr != null) {
+            Node next = curr.getNext();
+            curr.setNext(prev);
+            prev.setNext(null);
+            if (prev == mFirst) {
+                mFirst = curr;
+            }
+            if (old != null) {
+                old.setNext(curr);
+            }
+            old = prev;
+            prev = next;
+            if (prev != null) {
+                curr = prev.getNext();
+                if (curr == null) {
+                    old.setNext(prev);
+                    mLast = prev;
+                }
+            } else {
+                mLast = old;
+                break;
+            }
+        }
     }
 
     public void reverse() {
