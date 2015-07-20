@@ -4,6 +4,7 @@ public class SinglyLinkedList {
 
     private Node mFirst;
     private Node mLast;
+    // TODO: mSize; for toArray. So we won't need an extra list
 
     public SinglyLinkedList(Node first) {
         this.mFirst = first;
@@ -49,6 +50,7 @@ public class SinglyLinkedList {
     }
 
     public void reversePairs() {
+        // The list is empty or contains one element
         if (mFirst == null || mFirst.getNext() == null) {
             return;
         }
@@ -60,38 +62,20 @@ public class SinglyLinkedList {
                 // Set the next element of temp, where temp is the predecessor of fop.
                 temp.setNext(fop.getNext());
             }
-            temp = fop.getNext();
-            
-        }
-    }
-/*
-    
-            public void SwapPairsEnc()
-        {
-            if (First == null || First.Next == null)
-                return;
-            Node Temp = null;
-            Node FirstOfPair = First;
-            mFirst = First.Next;
-            while (FirstOfPair != null && FirstOfPair.Next != null)
-            {
-                //Previos connect to second of pair. First action (picture)
-                if (Temp != null)
-                    Temp.Next = FirstOfPair.Next;
-                //Save second of pair
-                Temp = FirstOfPair.Next;
-                //Connect the rest of list to the first element
-                FirstOfPair.Next = Temp.Next;
-                //Connect the first element to the second
-                Temp.Next = FirstOfPair;
-                //Step forward
-                FirstOfPair = FirstOfPair.Next;
-                //Save the first of the pair
-                Temp = Temp.Next;
+            // 12 -> 34 -> 88
+            temp = fop.getNext(); // temp == 34
+            fop.setNext(temp.getNext()); // 12 -> 88
+            temp.setNext(fop); // 34 -> 12
+            temp = temp.getNext(); // temp == 12
+            fop = temp.getNext(); // fop == 88
+            if (fop == null) {
+                mLast = temp;
+            } else {
+                mLast = fop;
             }
         }
-    
-    */
+    }
+
     public void reverse() {
         Node prev = mFirst;
         Node current = mFirst.getNext();
