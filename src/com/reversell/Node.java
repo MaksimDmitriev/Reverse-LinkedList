@@ -20,10 +20,29 @@ class Node {
     public Node getNext() {
         return next;
     }
-    
+
     @Override
     public String toString() {
         return Integer.toString(data);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Node)) {
+            return false;
+        }
+        Node another = (Node) obj;
+        return data == another.data;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = 17;
+        result = 31 * result + data;
+        return result;
     }
 
 }

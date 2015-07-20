@@ -1,73 +1,85 @@
 package com.reversell;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 import org.junit.Test;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class SinglyLinkedListTest {
 
     @Test
-    public void test_empty_reversed_is_empty() {
-        assertArrayEquals(new int[] {}, reversed());
+    public void testEmpty() {
+        int[] orig = new int[] {};
+        int[] expected = new int[] {};
+        SinglyLinkedList linkedList = new SinglyLinkedList(orig);
+        assertArrayEquals(expected, toArray(reverse(linkedList)));
+        assertNull(linkedList.getLast());
     }
 
     @Test
-    public void test_12_reversed_is_12() {
-        assertArrayEquals(new int[] { 12 }, reversed(12));
+    public void testSingleElement() {
+        int[] orig = new int[] { 12 };
+        int[] expected = new int[] { 12 };
+
+        SinglyLinkedList linkedList = new SinglyLinkedList(orig);
+        assertArrayEquals(expected, toArray(reverse(linkedList)));
+        assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
     }
 
     @Test
-    public void test_12_34_reversed_is_34_12() {
-        assertArrayEquals(new int[] { 34, 12 }, reversed(12, 34));
+    public void testTwoElements() {
+        int[] orig = new int[] { 12, 34 };
+        int[] expected = new int[] { 34, 12 };
+
+        SinglyLinkedList linkedList = new SinglyLinkedList(orig);
+        assertArrayEquals(expected, toArray(reverse(linkedList)));
+        assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
     }
 
     @Test
-    public void test_12_34_78_reversed_is_34_12_78() {
-        assertArrayEquals(new int[] { 34, 12, 78 }, reversed(12, 34, 78));
+    public void testThreeElements() {
+        int[] orig = new int[] { 12, 34, 78 };
+        int[] expected = new int[] { 34, 12, 78 };
+
+        SinglyLinkedList linkedList = new SinglyLinkedList(orig);
+        assertArrayEquals(expected, toArray(reverse(linkedList)));
+        assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
+
     }
 
     @Test
-    public void test_12_34_78_124_reversed_is_34_12_124_78() {
-        assertArrayEquals(new int[] { 34, 12, 124, 78 }, reversed(12, 34, 78, 124));
+    public void testEvenElements() {
+        int[] orig = new int[] { 12, 34, 78, 56 };
+        int[] expected = new int[] { 34, 12, 56, 78 };
+
+        SinglyLinkedList linkedList = new SinglyLinkedList(orig);
+        assertArrayEquals(expected, toArray(reverse(linkedList)));
+        assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
     }
 
     @Test
-    public void test_five_elements() {
-        assertArrayEquals(new int[] { 34, 12, 124, 78, 67 }, reversed(12, 34, 78, 124, 67));
+    public void testOddElements() {
+        int[] orig = new int[] { 12, 34, 78, 56, 677 };
+        int[] expected = new int[] { 34, 12, 56, 78, 677 };
+
+        SinglyLinkedList linkedList = new SinglyLinkedList(orig);
+        assertArrayEquals(expected, toArray(reverse(linkedList)));
+        assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
     }
 
-    @Test
-    public void test_six_elements() {
-        assertArrayEquals(new int[] { 34, 12, 124, 78, 67, 88 }, reversed(12, 34, 78, 124, 88, 67));
-    }
-
-    private int[] reversed(int... nums) {
-        SinglyLinkedList list = new SinglyLinkedList(nums);
+    private SinglyLinkedList reverse(SinglyLinkedList list) {
         list.reversePairs();
-        return toArray(list);
-    }
-    
-    private int[] reversed2(int... nums) {
-        SinglyLinkedList list = new SinglyLinkedList(nums);
-        list.reversePairs();
-        return toArray(list);
+        return list;
     }
 
     private int[] toArray(SinglyLinkedList list) {
-        List<Integer> values = new ArrayList<>();
-
+        int[] arr = new int[list.getSize()];
         Node node = list.getFirst();
+        int index = 0;
         while (node != null) {
-            values.add(node.getData());
+            arr[index++] = node.getData();
             node = node.getNext();
-        }
-
-        int[] arr = new int[values.size()];
-        for (int index = 0; index < arr.length; ++index) {
-            arr[index] = values.get(index);
         }
         return arr;
     }

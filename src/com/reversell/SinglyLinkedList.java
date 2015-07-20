@@ -2,13 +2,15 @@ package com.reversell;
 
 public class SinglyLinkedList {
 
+    // TODO: make sure your test cover all the possible types of inputs
     private Node mFirst;
     private Node mLast;
-    // TODO: mSize; for toArray. So we won't need an extra list
+    private int mSize;
 
     public SinglyLinkedList(Node first) {
         this.mFirst = first;
         this.mLast = first;
+        this.mSize = 1;
     }
 
     public SinglyLinkedList(int[] array) {
@@ -17,14 +19,20 @@ public class SinglyLinkedList {
         }
         this.mFirst = new Node(array[0]);
         this.mLast = this.mFirst;
+        mSize = 1;
         for (int i = 1; i < array.length; i++) {
             addLast(new Node(array[i]));
         }
     }
 
+    public int getSize() {
+        return mSize;
+    }
+
     public void addLast(Node node) {
         mLast.setNext(node);
         mLast = node;
+        mSize++;
     }
 
     public Node getFirst() {
