@@ -8,6 +8,7 @@ import org.junit.Test;
 
 public class SinglyLinkedListTest {
 
+    // The list is empty. We don't run the while loop in reversePairs
     @Test
     public void testEmpty() {
         int[] orig = new int[] {};
@@ -17,6 +18,7 @@ public class SinglyLinkedListTest {
         assertNull(linkedList.getLast());
     }
 
+    // The list contains one element. We don't run the while loop in reversePairs
     @Test
     public void testSingleElement() {
         int[] orig = new int[] { 12 };
@@ -27,6 +29,8 @@ public class SinglyLinkedListTest {
         assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
     }
 
+    // The while loop is run once.
+    // We leave the loop because fop is null. We don't go inside (temp != null)
     @Test
     public void testTwoElements() {
         int[] orig = new int[] { 12, 34 };
@@ -37,6 +41,8 @@ public class SinglyLinkedListTest {
         assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
     }
 
+    // The while loop is run once.
+    // We leave the loop because fop.getNext() is null. We don't go inside (temp != null)
     @Test
     public void testThreeElements() {
         int[] orig = new int[] { 12, 34, 78 };
@@ -45,28 +51,20 @@ public class SinglyLinkedListTest {
         SinglyLinkedList linkedList = new SinglyLinkedList(orig);
         assertArrayEquals(expected, toArray(reverse(linkedList)));
         assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
-
     }
-
+    
+    // The while loop is run more than once.
+    // We go inside (temp != null).
     @Test
-    public void testEvenElements() {
-        int[] orig = new int[] { 12, 34, 78, 56 };
-        int[] expected = new int[] { 34, 12, 56, 78 };
+    public void testFourElements() {
+        int[] orig = new int[] { 12, 34, 78 };
+        int[] expected = new int[] { 34, 12, 78 };
 
         SinglyLinkedList linkedList = new SinglyLinkedList(orig);
         assertArrayEquals(expected, toArray(reverse(linkedList)));
         assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
     }
 
-    @Test
-    public void testOddElements() {
-        int[] orig = new int[] { 12, 34, 78, 56, 677 };
-        int[] expected = new int[] { 34, 12, 56, 78, 677 };
-
-        SinglyLinkedList linkedList = new SinglyLinkedList(orig);
-        assertArrayEquals(expected, toArray(reverse(linkedList)));
-        assertEquals(new Node(expected[expected.length - 1]), linkedList.getLast());
-    }
 
     private SinglyLinkedList reverse(SinglyLinkedList list) {
         list.reversePairs();

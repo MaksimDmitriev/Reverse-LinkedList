@@ -2,7 +2,6 @@ package com.reversell;
 
 public class SinglyLinkedList {
 
-    // TODO: make sure your test cover all the possible types of inputs
     private Node mFirst;
     private Node mLast;
     private int mSize;
