@@ -1,6 +1,7 @@
 package com.singlylinkedlist;
 
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class SinglyLinkedList implements Iterable<Integer> {
 
@@ -10,16 +11,6 @@ public class SinglyLinkedList implements Iterable<Integer> {
     public SinglyLinkedList(int[] data) {
         for (int i = data.length - 1; i >= 0; i--) {
             addFirst(data[i]);
-        }
-    }
-
-    public SinglyLinkedList(SinglyLinkedList from) {
-        Node source = from.head.getNext();
-        Node dst = head;
-        while (source != null) {
-            dst.setNext(new Node(source.getData()));
-            source = source.getNext();
-            dst = dst.getNext();
         }
     }
 
@@ -58,15 +49,12 @@ public class SinglyLinkedList implements Iterable<Integer> {
             return "[]";
         }
         
-        StringBuilder s = new StringBuilder("[");
-        while(true) {
+        StringBuilder s = new StringBuilder("[" + iterator.next());
+        while(iterator.hasNext()) {
             int nodeValue = iterator.next();
-            s.append(nodeValue);
-            if (!iterator.hasNext()) {
-                return s.append(']').toString();
-            }
-            s.append(" -> ");
+            s.append(" -> " + nodeValue);
         }
+        return s.append(']').toString();
     }
 
     @Override
@@ -74,14 +62,20 @@ public class SinglyLinkedList implements Iterable<Integer> {
         return new Iterator<Integer>() {
 
             Node current = head;
+            Node prev;
 
             @Override
             public void remove() {
-                throw new UnsupportedOperationException();
+                // TODO: finish
+                prev.setNext(current.getNext());
             }
 
             @Override
             public Integer next() {
+                if (current.getNext() == null) {
+                    throw new NoSuchElementException();
+                }
+                prev = current;
                 current = current.getNext();
                 return current.getData();
             }

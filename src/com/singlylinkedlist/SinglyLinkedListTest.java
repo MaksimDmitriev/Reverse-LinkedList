@@ -29,7 +29,7 @@ public class SinglyLinkedListTest {
 
     private void doReverse(int[] data) {
         SinglyLinkedList orig = new SinglyLinkedList(data);
-        SinglyLinkedList copy = new SinglyLinkedList(orig);
+        SinglyLinkedList copy = new SinglyLinkedList(data);
         orig.reversePairs();
 
         Iterator<Integer> origIterator = orig.iterator();
