@@ -5,19 +5,23 @@ class Node {
     private Node next;
     private int data;
 
-    public Node(int data) {
+    Node(int data) {
         this.data = data;
     }
 
-    public int getData() {
+    int getData() {
         return data;
     }
-
-    public void setNext(Node next) {
-        this.next = next;
+    
+    void setData(int data) {
+        this.data = data;
     }
 
-    public Node getNext() {
+    void setNext(Node n) {
+        this.next = n;
+    }
+
+    Node getNext() {
         return next;
     }
 
