@@ -12,10 +12,6 @@ class Node {
     int getData() {
         return data;
     }
-    
-    void setData(int data) {
-        this.data = data;
-    }
 
     void setNext(Node n) {
         this.next = n;
