@@ -1,4 +1,4 @@
-package com.reversell;
+package com.singlylinkedlist;
 
 import java.util.Iterator;
 
@@ -53,13 +53,20 @@ public class SinglyLinkedList implements Iterable<Integer> {
 
     @Override
     public String toString() {
+        Iterator<Integer> iterator = iterator();
+        if (!iterator.hasNext()) {
+            return "[]";
+        }
+        
         StringBuilder s = new StringBuilder("[");
-        for (Node n = this.head.getNext(); n != null; n = n.getNext()) {
-            s.append(n);
+        while(true) {
+            int nodeValue = iterator.next();
+            s.append(nodeValue);
+            if (!iterator.hasNext()) {
+                return s.append(']').toString();
+            }
             s.append(" -> ");
         }
-        if (s.length() >= 4) s.setLength(s.length() - 4); // Remove final " -> "
-        return s.append(']').toString();
     }
 
     @Override

@@ -1,4 +1,4 @@
-package com.reversell;
+package com.singlylinkedlist;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -16,10 +16,15 @@ public class SinglyLinkedListTest {
     public void testSingle() {
         doReverse(new int[] { 1 });
     }
+    
+    @Test
+    public void testLoopOnce() {
+        doReverse(new int[] { 1, 2 });
+    }
 
     @Test
-    public void testMany() {
-        doReverse(new int[] { 1, 2, 3, 4 });
+    public void testLoopMoreThanOnce() {
+        doReverse(new int[] { 1, 2, 3, 4, 5, 6 });
     }
 
     private void doReverse(int[] data) {
