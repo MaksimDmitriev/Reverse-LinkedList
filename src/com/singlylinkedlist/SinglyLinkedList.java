@@ -64,15 +64,18 @@ public class SinglyLinkedList implements Iterable<Integer> {
             Node current = head;
             Node prev;
 
+            // TODO: ask a question. Why do they eliminate obsolete references in the source code
+            // of LinkedList? Why do they consider those references obsolete?
             @Override
             public void remove() {
-                // TODO: finish
                 prev.setNext(current.getNext());
+                current.setNext(null);
+                current = prev;
             }
 
             @Override
             public Integer next() {
-                if (current.getNext() == null) {
+                if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
                 prev = current;

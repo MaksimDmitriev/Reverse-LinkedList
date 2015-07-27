@@ -3,57 +3,39 @@ package com.singlylinkedlist;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Iterator;
-
 public class SinglyLinkedListTest {
 
     @Test
     public void testEmpty() {
-        doReverse(new int[] {});
+        expectReverse(new int[] {}, new int[] {});
     }
 
     @Test
     public void testSingle() {
-        doReverse(new int[] { 1 });
+        expectReverse(new int[] { 1 }, new int[] { 1 });
     }
-    
+
     @Test
     public void testLoopOnce() {
-        doReverse(new int[] { 1, 2 });
+        expectReverse(new int[] { 1, 2 }, new int[] { 2, 1 });
     }
 
     @Test
     public void testLoopMoreThanOnce() {
-        doReverse(new int[] { 1, 2, 3, 4, 5, 6 });
+        expectReverse(new int[] { 1, 2, 3, 4, 5, 6 }, new int[] { 2, 1, 4, 3, 6, 5 });
     }
 
-    private void doReverse(int[] data) {
-        SinglyLinkedList orig = new SinglyLinkedList(data);
-        SinglyLinkedList copy = new SinglyLinkedList(data);
-        orig.reversePairs();
-
-        Iterator<Integer> origIterator = orig.iterator();
-        Iterator<Integer> copyIterator = copy.iterator();
-
-        // The list is empty
-        if (!origIterator.hasNext()) {
+    private void expectReverse(int[] orig, int[] reversed) {
+        Assert.assertEquals(orig.length, reversed.length);
+        int length = orig.length;
+        if (length == 0) {
             return;
         }
-        int origFirstInPair = origIterator.next();
-        int copyFirstInPair = copyIterator.next();
-        while (true) {
-            if (!origIterator.hasNext()) {
-                Assert.assertTrue(origFirstInPair == copyFirstInPair);
-                return;
+        for (int i = 1; i < length - 1; i++) {
+            if (orig[i] != reversed[i - 1] || reversed[i] != orig[i - 1]) {
+                Assert.fail("Failed at i = " + i);
             }
-            int origSecondInPair = origIterator.next();
-            int copySecondInPair = copyIterator.next();
-            Assert.assertTrue(origFirstInPair == copySecondInPair && origSecondInPair == copyFirstInPair);
-            if (!origIterator.hasNext()) {
-                return;
-            }
-            origFirstInPair = origIterator.next();
-            copyFirstInPair = copyIterator.next();
         }
+        Assert.assertEquals(orig[length - 1], reversed[length - 1]);
     }
 }
