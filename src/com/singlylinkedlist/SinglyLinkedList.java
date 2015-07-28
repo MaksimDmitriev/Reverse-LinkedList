@@ -7,6 +7,7 @@ public class SinglyLinkedList implements Iterable<Integer> {
 
     /** Dummy node */
     private final Node head = new Node(0);
+    private int size;
 
     public SinglyLinkedList(int[] data) {
         for (int i = data.length - 1; i >= 0; i--) {
@@ -18,6 +19,7 @@ public class SinglyLinkedList implements Iterable<Integer> {
         Node n = new Node(datum);
         n.setNext(head.getNext());
         head.setNext(n);
+        size++;
     }
 
     public void reversePairs() {
@@ -41,6 +43,16 @@ public class SinglyLinkedList implements Iterable<Integer> {
             a = b;
         }
     }
+    
+    public int[] toArray() {
+        int array[] = new int[size];
+        int i = 0;
+        Iterator<Integer> iterator = iterator();
+        while(iterator.hasNext()) {
+            array[i++] = iterator.next();
+        }
+        return array;
+    }
 
     @Override
     public String toString() {
@@ -56,21 +68,40 @@ public class SinglyLinkedList implements Iterable<Integer> {
         }
         return s.append(']').toString();
     }
+    
+    public boolean remove(Node node) {
+        /* 
+         * The public method addFirst(int) allows to pass primitive integer values rather than
+         * objects. Nulls can't be added to my singly linked list, and there is no reason to iterate
+         * over the list to finally return false.
+         */
+        if (node == null) {
+            return false;
+        }
+        Node prev = head;
+        Node curr = head.getNext();
+        while(curr != null) {
+            if (node.equals(curr)) {
+                prev.setNext(curr.getNext());
+                curr = null;
+                size--;
+                return true;
+            }
+            prev = curr;
+            curr = curr.getNext();
+        }
+        return false;
+    }
 
     @Override
     public Iterator<Integer> iterator() {
         return new Iterator<Integer>() {
 
             Node current = head;
-            Node prev;
 
-            // TODO: ask a question. Why do they eliminate obsolete references in the source code
-            // of LinkedList? Why do they consider those references obsolete?
             @Override
             public void remove() {
-                prev.setNext(current.getNext());
-                current.setNext(null);
-                current = prev;
+                SinglyLinkedList.this.remove(current);
             }
 
             @Override
@@ -78,7 +109,6 @@ public class SinglyLinkedList implements Iterable<Integer> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                prev = current;
                 current = current.getNext();
                 return current.getData();
             }
