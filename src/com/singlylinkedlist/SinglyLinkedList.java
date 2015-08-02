@@ -17,8 +17,8 @@ public class SinglyLinkedList implements Iterable<Integer> {
 
     public void addFirst(int datum) {
         Node n = new Node(datum);
-        n.setNext(head.getNext());
-        head.setNext(n);
+        n.next = head.next;
+        head.next = n;
         size++;
     }
 
@@ -35,11 +35,11 @@ public class SinglyLinkedList implements Iterable<Integer> {
         // +-- becomes "a" of the next iteration
 
         Node a = this.head, b, c;
-        while ((b = a.getNext()) != null && (c = b.getNext()) != null) {
-            Node d = c.getNext();
-            a.setNext(c);
-            c.setNext(b);
-            b.setNext(d);
+        while ((b = a.next) != null && (c = b.next) != null) {
+            Node d = c.next;
+            a.next = c;
+            c.next = b;
+            b.next = d;
             a = b;
         }
     }
@@ -68,40 +68,26 @@ public class SinglyLinkedList implements Iterable<Integer> {
         }
         return s.append(']').toString();
     }
-    
-    public boolean remove(Node node) {
-        /* 
-         * The public method addFirst(int) allows to pass primitive integer values rather than
-         * objects. Nulls can't be added to my singly linked list, and there is no reason to iterate
-         * over the list to finally return false.
-         */
-        if (node == null) {
-            return false;
-        }
-        Node prev = head;
-        Node curr = head.getNext();
-        while(curr != null) {
-            if (node.equals(curr)) {
-                prev.setNext(curr.getNext());
-                curr = null;
-                size--;
-                return true;
-            }
-            prev = curr;
-            curr = curr.getNext();
-        }
-        return false;
-    }
 
     @Override
     public Iterator<Integer> iterator() {
         return new Iterator<Integer>() {
 
+            Node prev;
             Node current = head;
+            Node next = current.next;
 
             @Override
             public void remove() {
-                SinglyLinkedList.this.remove(current);
+                prev.next = next;
+                current.next = null;
+                current = null; // TODO: Do I need to eliminate this obsolete reference?
+                current = next;
+                if (current == null) {
+                    next = null;
+                } else {
+                    next = current.next;
+                }
             }
 
             @Override
@@ -109,16 +95,47 @@ public class SinglyLinkedList implements Iterable<Integer> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                current = current.getNext();
-                return current.getData();
+                prev = current;
+                current = next;
+                next = next.next;
+                return current.data;
             }
 
             @Override
             public boolean hasNext() {
-                return current.getNext() != null;
+                return next != null;
             }
 
         };
+    }
+    
+    private static class Node {
+
+         Node next;
+         int data;
+
+         Node(int data) {
+            this.data = data;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (!(obj instanceof Node)) {
+                return false;
+            }
+            Node another = (Node) obj;
+            return data == another.data;
+        }
+
+        @Override
+        public int hashCode() {
+            int result = 17;
+            result = 31 * result + data;
+            return result;
+        }
     }
 
 }
