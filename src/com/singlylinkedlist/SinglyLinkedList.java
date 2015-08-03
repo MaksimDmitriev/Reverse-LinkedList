@@ -73,21 +73,15 @@ public class SinglyLinkedList implements Iterable<Integer> {
     public Iterator<Integer> iterator() {
         return new Iterator<Integer>() {
 
-            Node prev;
-            Node current = head;
-            Node next = current.next;
+            Node prev = null, current = head;
 
             @Override
             public void remove() {
-                prev.next = next;
-                current.next = null;
-                current = null; // TODO: Do I need to eliminate this obsolete reference?
-                current = next;
-                if (current == null) {
-                    next = null;
-                } else {
-                    next = current.next;
+                if (this.prev == null) {
+                    throw new IllegalStateException("next() has not been called");
                 }
+                this.prev.next = this.current.next;
+                this.prev = null;
             }
 
             @Override
@@ -95,15 +89,14 @@ public class SinglyLinkedList implements Iterable<Integer> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                prev = current;
-                current = next;
-                next = next.next;
-                return current.data;
+                this.prev = this.current;
+                this.current = current.next;
+                return this.current.data;
             }
 
             @Override
             public boolean hasNext() {
-                return next != null;
+                return this.current.next != null;
             }
 
         };
@@ -116,25 +109,6 @@ public class SinglyLinkedList implements Iterable<Integer> {
 
          Node(int data) {
             this.data = data;
-        }
-
-        @Override
-        public boolean equals(Object obj) {
-            if (obj == this) {
-                return true;
-            }
-            if (!(obj instanceof Node)) {
-                return false;
-            }
-            Node another = (Node) obj;
-            return data == another.data;
-        }
-
-        @Override
-        public int hashCode() {
-            int result = 17;
-            result = 31 * result + data;
-            return result;
         }
     }
 
