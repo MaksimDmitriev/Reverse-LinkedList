@@ -1,5 +1,6 @@
 package com.singlylinkedlist;
 
+import java.util.ConcurrentModificationException;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
@@ -8,6 +9,7 @@ public class SinglyLinkedList implements Iterable<Integer> {
     /** Dummy node */
     private final Node head = new Node(0);
     private int size;
+    private int modCount = 0;
 
     public SinglyLinkedList(int[] data) {
         for (int i = data.length - 1; i >= 0; i--) {
@@ -20,6 +22,7 @@ public class SinglyLinkedList implements Iterable<Integer> {
         n.next = head.next;
         head.next = n;
         size++;
+        modCount++;
     }
 
     public void reversePairs() {
@@ -41,6 +44,7 @@ public class SinglyLinkedList implements Iterable<Integer> {
             c.next = b;
             b.next = d;
             a = b;
+            modCount++;
         }
     }
     
@@ -74,18 +78,22 @@ public class SinglyLinkedList implements Iterable<Integer> {
         return new Iterator<Integer>() {
             Node prev = head, current = head;
             boolean removable = false;
+            int expectedModCount = modCount;
 
             @Override
             public void remove() {
                 if (!this.removable) {
                     throw new IllegalStateException("next() has not been called");
                 }
+                checkForComodification();
                 this.removable = false;
                 this.prev.next = this.current.next;
+                updateModCount();
             }
 
             @Override
             public Integer next() {
+                checkForComodification();
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
@@ -99,7 +107,16 @@ public class SinglyLinkedList implements Iterable<Integer> {
             public boolean hasNext() {
                 return this.current.next != null;
             }
-
+            
+            void checkForComodification() {
+                if (modCount != expectedModCount)
+                    throw new ConcurrentModificationException();
+            }
+            
+            void updateModCount() {
+                expectedModCount++;
+                modCount++;
+            }
         };
     }
     
