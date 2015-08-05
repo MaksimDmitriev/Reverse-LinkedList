@@ -26,6 +26,9 @@ public class SinglyLinkedList implements Iterable<Integer> {
     }
 
     public void reversePairs() {
+        if (size < 2) {
+            return;
+        }
         // For each loop iteration, transform
         //
         // maybe null --+
@@ -44,8 +47,8 @@ public class SinglyLinkedList implements Iterable<Integer> {
             c.next = b;
             b.next = d;
             a = b;
-            modCount++;
         }
+        modCount++;
     }
     
     public int[] toArray() {
