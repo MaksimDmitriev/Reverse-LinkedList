@@ -72,16 +72,16 @@ public class SinglyLinkedList implements Iterable<Integer> {
     @Override
     public Iterator<Integer> iterator() {
         return new Iterator<Integer>() {
-
-            Node prev = null, current = head;
+            Node prev = head, current = head;
+            boolean removable = false;
 
             @Override
             public void remove() {
-                if (this.prev == null) {
+                if (!this.removable) {
                     throw new IllegalStateException("next() has not been called");
                 }
+                this.removable = false;
                 this.prev.next = this.current.next;
-                this.prev = null;
             }
 
             @Override
@@ -89,8 +89,9 @@ public class SinglyLinkedList implements Iterable<Integer> {
                 if (!hasNext()) {
                     throw new NoSuchElementException();
                 }
-                this.prev = this.current;
-                this.current = current.next;
+                if (this.removable) this.prev = this.current;
+                this.current = this.current.next;
+                this.removable = true;
                 return this.current.data;
             }
 
