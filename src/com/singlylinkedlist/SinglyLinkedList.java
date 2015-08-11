@@ -11,7 +11,10 @@ public class SinglyLinkedList implements Iterable<Integer> {
     private int size;
     private int modCount = 0;
 
-    public SinglyLinkedList(int[] data) {
+    public SinglyLinkedList(int... data) {
+        if (data == null) {
+            return;
+        }
         for (int i = data.length - 1; i >= 0; i--) {
             addFirst(data[i]);
         }
@@ -25,9 +28,9 @@ public class SinglyLinkedList implements Iterable<Integer> {
         modCount++;
     }
 
-    public void reversePairs() {
+    public boolean reversePairs() {
         if (size < 2) {
-            return;
+            return false;
         }
         // For each loop iteration, transform
         //
@@ -49,6 +52,11 @@ public class SinglyLinkedList implements Iterable<Integer> {
             a = b;
         }
         modCount++;
+        return true;
+    }
+    
+    public int getSize() {
+        return size;
     }
     
     public int[] toArray() {
