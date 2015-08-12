@@ -100,6 +100,7 @@ public class SinglyLinkedList implements Iterable<Integer> {
                 this.removable = false;
                 this.prev.next = this.current.next;
                 updateModCount();
+                size--;
             }
 
             @Override

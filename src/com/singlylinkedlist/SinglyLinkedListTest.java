@@ -5,6 +5,7 @@ import org.junit.Test;
 
 import java.util.ConcurrentModificationException;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 public class SinglyLinkedListTest {
 
@@ -34,7 +35,7 @@ public class SinglyLinkedListTest {
         linkedList.reversePairs();
         Assert.assertArrayEquals(reversed, linkedList.toArray());
     }
-    
+
     @Test
     public void test_b_not_null_c_null() {
         // Initially (b != null && c != null)
@@ -54,7 +55,7 @@ public class SinglyLinkedListTest {
         linkedList.reversePairs();
         Assert.assertArrayEquals(reversed, linkedList.toArray());
     }
-    
+
     @Test
     public void testLoopMoreThanOnceOdd() {
         int[] orig = new int[] { 1, 2, 3, 4, 5, 6, 7 };
@@ -63,7 +64,7 @@ public class SinglyLinkedListTest {
         linkedList.reversePairs();
         Assert.assertArrayEquals(reversed, linkedList.toArray());
     }
-    
+
     @Test
     public void testToStringEmpty() {
         SinglyLinkedList linkedList = new SinglyLinkedList(null);
@@ -79,14 +80,48 @@ public class SinglyLinkedListTest {
     @Test
     public void testToStringHasNext() {
         SinglyLinkedList linkedList = new SinglyLinkedList(1, 2);
-        Assert.assertEquals("[1, 2]", linkedList.toString());
+        Assert.assertEquals("[1 -> 2]", linkedList.toString());
+    }
+
+    @Test(expected = ConcurrentModificationException.class)
+    public void testAddAfterCreatingIterator() {
+        SinglyLinkedList linkedList = new SinglyLinkedList(new int[] { 1, 2, 3, 4 });
+        Iterator<Integer> iterator = linkedList.iterator();
+        if (iterator.hasNext()) {
+            linkedList.addFirst(12);
+            iterator.next();
+        }
+    }
+
+    @Test(expected = IllegalStateException.class)
+    public void testRemoveTwice() {
+        SinglyLinkedList linkedList = new SinglyLinkedList(new int[] { 1, 2, 3, 4 });
+        Iterator<Integer> iterator = linkedList.iterator();
+        while (iterator.hasNext()) {
+            iterator.remove();
+        }
     }
     
-    @Test(expected = ConcurrentModificationException.class)
-    public void testThrowIllegalStateException() {
-        SinglyLinkedList linkedList = new SinglyLinkedList(new int [] {1, 2, 3, 4});
+    @Test(expected = NoSuchElementException.class)
+    public void testNextAfterIteration() {
+        SinglyLinkedList linkedList = new SinglyLinkedList(new int[] { 1, 2, 3, 4 });
         Iterator<Integer> iterator = linkedList.iterator();
-        linkedList.addFirst(12);
+        while (iterator.hasNext()) {
+            iterator.next();
+        }
         iterator.next();
+    }
+    
+    @Test
+    public void testRemove() {
+        SinglyLinkedList linkedList = new SinglyLinkedList(new int[] { 1, 2, 3, 4 });
+        Iterator<Integer> iterator = linkedList.iterator();
+        while (iterator.hasNext()) {
+            int data = iterator.next();
+            if (data == 1 || data == 4) {
+                iterator.remove();
+            }
+        }
+        Assert.assertArrayEquals(new int [] {2, 3}, linkedList.toArray());
     }
 }
