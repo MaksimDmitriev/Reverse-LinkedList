@@ -45,18 +45,13 @@ public class SinglyLinkedList implements Iterable<Integer> {
 
         Node a = this.head, b, c;
         while ((b = a.next) != null && (c = b.next) != null) {
-            Node d = c.next;
             a.next = c;
+            b.next = c.next;
             c.next = b;
-            b.next = d;
             a = b;
         }
         modCount++;
         return true;
-    }
-    
-    public int getSize() {
-        return size;
     }
     
     public int[] toArray() {
